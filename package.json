@@ -20,6 +20,7 @@
     "test": "yarn run build && jest"
   },
   "devDependencies": {
-    "@glennsl/bs-jest": "^0.4.2"
+    "@glennsl/bs-jest": "^0.4.2",
+    "lerna": "^2.10.2"
   }
 }
