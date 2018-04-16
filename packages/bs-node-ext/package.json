@@ -1,5 +1,5 @@
 {
-  "name": "@conduitvc/bs-node-stream",
+  "name": "@conduitvc/bs-node-ext",
   "version": "0.1.0",
   "scripts": {
     "build": "bsb -make-world",

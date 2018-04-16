@@ -6,7 +6,8 @@
   "sources": [
     {
       "dir": "__test__",
-      "type": "dev"
+      "type": "dev",
+      "subdirs": true
     }
   ],
   "package-specs": {
@@ -15,11 +16,7 @@
   },
   "suffix": ".bs.js",
   "bsc-flags": ["-bs-no-version-header", "-bs-super-errors"],
-  "bs-dependencies": [
-    "bs-node",
-    "@conduitvc/bs-node-stream",
-    "@glennsl/bs-jest"
-  ],
+  "bs-dependencies": ["bs-node", "@conduitvc/bs-node-ext", "@glennsl/bs-jest"],
   "warnings": {
     "error": "+101"
   },

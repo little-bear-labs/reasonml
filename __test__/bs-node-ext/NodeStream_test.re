@@ -2,9 +2,9 @@ open Jest;
 
 open BsNode;
 
-open NodeStream;
+open NodeExtStream;
 
-open NodeStreamCast;
+open NodeExtStreamCast;
 
 describe("Stream", () => {
   open Expect;

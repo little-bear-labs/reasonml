@@ -1,6 +1,6 @@
-# NodeStream
+# Node Extensions
 
-This project provides bindings to node's stream module.
+This project provides bindings to node's stream modules and more.
 
 ## Usage:
 
@@ -20,10 +20,6 @@ npm run build
 ```
 npm run start
 ```
-
-## Usage
-
-Run `node src/Demo.bs.js`
 
 # Editor
 
