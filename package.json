@@ -1,0 +1,9 @@
+{
+  "name": "conduit-reasonml",
+  "private": true,
+  "version": "1.0.0",
+  "description": "ConduitVC - ReasonML bindings (mono repo)",
+  "main": "index.js",
+  "license": "MIT",
+  "workspaces": ["packages/*"]
+}
