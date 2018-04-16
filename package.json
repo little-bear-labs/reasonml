@@ -5,5 +5,21 @@
   "description": "ConduitVC - ReasonML bindings (mono repo)",
   "main": "index.js",
   "license": "MIT",
-  "workspaces": ["packages/*"]
+  "workspaces": [
+    "packages/*"
+  ],
+  "jest": {
+    "testMatch": [
+      "**/__test__/**/*_test.bs.js"
+    ]
+  },
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "test": "yarn run build && jest"
+  },
+  "devDependencies": {
+    "@glennsl/bs-jest": "^0.4.2"
+  }
 }

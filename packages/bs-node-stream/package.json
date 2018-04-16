@@ -4,20 +4,15 @@
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w",
-    "clean": "bsb -clean-world",
-    "test": "yarn run build && jest"
+    "clean": "bsb -clean-world"
   },
   "keywords": ["BuckleScript"],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@glennsl/bs-jest": "^0.4.2",
     "bs-platform": "^2.2.3"
   },
   "dependencies": {
     "bs-node": "buckletypes/bs-node"
-  },
-  "jest": {
-    "testMatch": ["**/__test__/**/*_test.bs.js"]
   }
 }

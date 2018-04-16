@@ -1,4 +1,4 @@
-open Stream;
+open NodeStream;
 
 external toBuffer : 'a => BsNode.NodeBuffer.t = "%identity";
 
