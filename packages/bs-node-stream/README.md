@@ -1,6 +1,13 @@
-# Basic Reason Template
+# NodeStream
 
-Hello! This project allows you to quickly get started with Reason and BuckleScript. If you wanted a more sophisticated version, try the `react` template (`bsb -theme react -init .`).
+This project provides bindings to node's stream module.
+
+## Usage:
+
+In addition to adding this module you will need the following dependencies.
+
+* Add `bs-node` to your `bsconfig.json`.
+* Add `buckletypes/bs-node` to package.json .
 
 # Build
 

@@ -20,11 +20,6 @@
     "@conduitvc/bs-node-stream",
     "@glennsl/bs-jest"
   ],
-  "bs-dev-dependencies": [
-    "bs-node",
-    "@conduitvc/bs-node-stream",
-    "@glennsl/bs-jest"
-  ],
   "warnings": {
     "error": "+101"
   },
