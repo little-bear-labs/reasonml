@@ -7,10 +7,6 @@
     {
       "dir": "src",
       "subdirs": true
-    },
-    {
-      "dir": "__test__",
-      "type": "dev"
     }
   ],
   "package-specs": {
