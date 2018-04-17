@@ -1,6 +1,6 @@
 open BsNode;
 
-type socket;
+type socket = NodeExtNet.socket;
 
 type classClientRequest;
 
@@ -14,7 +14,8 @@ class type clientRequest =
 type classServer;
 
 class type server = {
-  pub classServer: classServer
+  inherit NodeExtNet.server;
+  pub httpClassServer: classServer
 };
 
 /* TODO: inherit from net server */
@@ -46,10 +47,8 @@ module ClientRequest: {
   external getHeader : (Js.t(#clientRequest), string) => string = "";
   [@bs.send]
   external removeHeader : (Js.t(#clientRequest), string) => unit = "";
-  [@bs.send]
   external setHeader : (Js.t(#clientRequest), string, string) => unit = "";
-  [@bs.send]
-  external setNoDelay : (Js.t(#clientRequest), Js.boolean) => unit = "";
+  [@bs.send] external setNoDelay : (Js.t(#clientRequest), bool) => unit = "";
   [@bs.send.pipe: Js.t(#clientRequest)]
   external setTimeout : (Js.t(#clientRequest), int) => Js.t(#clientRequest) =
     "";
@@ -74,6 +73,7 @@ module ClientRequest: {
 };
 
 module Server: {
+  include (module type of NodeExtNet.Server);
   [@bs.send] external close : Js.t(#server) => unit = "";
   [@bs.send] external closeCb : (unit => unit) => unit = "close";
   [@bs.send] external listen : Js.t(#server) => unit = "";
@@ -114,9 +114,9 @@ module Server: {
 };
 
 module ServerResponse: {
+  include (module type of NodeExtStream.WritableStream);
   [@bs.send]
-  external addTrailers :
-    (Js.t(#serverResponse), Js.Dict.t(Js.Json.t)) => unit =
+  external addTrailers : (Js.t(#serverResponse), Js.Dict.t(string)) => unit =
     "";
   [@bs.get]
   external getConnection : Js.t(#serverResponse) => socket = "connection";
@@ -126,15 +126,14 @@ module ServerResponse: {
   [@bs.send]
   external getHeaderNames : Js.t(#serverResponse) => array(string) = "";
   [@bs.send]
-  external getHeaders : Js.t(#serverResponse) => Js.Dict.t(Js.Json.t) = "";
+  external getHeaders : Js.t(#serverResponse) => Js.Dict.t(string) = "";
   [@bs.send] external hasHeader : Js.t(#serverResponse) => bool = "";
   [@bs.get]
   external getHeadersSent : Js.t(#serverResponse) => bool = "headersSent";
   [@bs.send]
   external removeHeader : (Js.t(#serverResponse), string) => bool = "";
   [@bs.set]
-  external setSendDate : (Js.t(#serverResponse), Js.boolean) => bool =
-    "sendDate";
+  external setSendDate : (Js.t(#serverResponse), bool) => bool = "sendDate";
   [@bs.send]
   external setHeader : (Js.t(#serverResponse), string, string) => bool = "";
   external setTimeout : (Js.t(#serverResponse), int) => Js.t(#clientRequest) =
@@ -154,6 +153,17 @@ module ServerResponse: {
   external setStatusMessage : (Js.t(#serverResponse), string) => string =
     "statusMessage";
   [@bs.send] external writeContinue : Js.t(#serverResponse) => unit = "";
+  [@bs.send]
+  external writeHead :
+    (
+      Js.t(#serverResponse),
+      ~status: int,
+      ~message: string=?,
+      ~headers: Js.Dict.t(string)=?,
+      unit
+    ) =>
+    unit =
+    "";
   [@bs.send.pipe: Js.t(#serverResponse)]
   external on :
     ([@bs.string] [ | `close(unit => unit) | `finish(unit => unit)]) =>
@@ -166,7 +176,7 @@ module IncomingMessage: {
   [@bs.send]
   external destroyWithError : (Js.t(#incomingMessage), Js.Exn.t) => unit = "";
   [@bs.get]
-  external getHeaders : Js.t(#incomingMessage) => Js.Dict.t(Js.Json.t) =
+  external getHeaders : Js.t(#incomingMessage) => Js.Dict.t(string) =
     "headers";
   [@bs.get]
   external getHttpVersion : Js.t(#incomingMessage) => string = "httpVersion";
@@ -185,7 +195,7 @@ module IncomingMessage: {
     "statusMessage";
   [@bs.get]
   external getTrailers : Js.t(#incomingMessage) => socket = "trailers";
-  [@bs.get] external getUrl : Js.t(#incomingMessage) => socket = "url";
+  [@bs.get] external getUrl : Js.t(#incomingMessage) => string = "url";
   [@bs.send.pipe: Js.t(#incomingMessage)]
   external on :
     ([@bs.string] [ | `aborted(unit => unit) | `close(unit => unit)]) =>
@@ -195,10 +205,52 @@ module IncomingMessage: {
 
 [@bs.module "http"]
 external createServer :
-  (Js.t(incomingMessage), Js.t(serverResponse)) => Js.t(server) =
+  ((Js.t(incomingMessage), Js.t(serverResponse)) => unit) => Js.t(server) =
   "createServer";
 
 [@bs.module "http"]
 external getUrl :
   (string, Js.t(incomingMessage) => unit) => Js.t(clientRequest) =
   "get";
+
+module HttpRequestOpts: {
+  [@bs.deriving abstract]
+  type t = {
+    [@bs.optional]
+    protocol: string,
+    [@bs.optional]
+    host: string,
+    [@bs.optional]
+    hostname: string,
+    [@bs.optional]
+    family: int,
+    [@bs.optional]
+    port: int,
+    [@bs.optional]
+    localAddress: string,
+    [@bs.optional]
+    socketPath: string,
+    [@bs.optional] [@bs.as "method"]
+    httpMethod: string,
+    [@bs.optional]
+    path: string,
+    [@bs.optional]
+    headers: Js.Dict.t(string),
+    [@bs.optional]
+    auth: string,
+    [@bs.optional]
+    timeout: int,
+    [@bs.optional]
+    setHost: bool,
+  };
+};
+
+external getWithOptions :
+  (HttpRequestOpts.t, ~callback: Js.t(incomingMessage) => unit=?, unit) =>
+  Js.t(clientRequest) =
+  "get";
+
+external request :
+  (HttpRequestOpts.t, ~callback: Js.t(incomingMessage) => unit=?, unit) =>
+  Js.t(clientRequest) =
+  "";
