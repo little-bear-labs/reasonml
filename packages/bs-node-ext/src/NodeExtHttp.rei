@@ -18,7 +18,6 @@ class type server = {
   pub httpClassServer: classServer
 };
 
-/* TODO: inherit from net server */
 type classServerResponse;
 
 class type serverResponse =
@@ -38,6 +37,7 @@ class type incomingMessage =
   };
 
 module ClientRequest: {
+  include (module type of NodeExtStream.ReadableStream);
   /* placeholder type */
   [@bs.send] external abort : Js.t(#clientRequest) => unit = "";
   [@bs.get]
@@ -77,6 +77,8 @@ module Server: {
   [@bs.send] external close : Js.t(#server) => unit = "";
   [@bs.send] external closeCb : (unit => unit) => unit = "close";
   [@bs.send] external listen : Js.t(#server) => unit = "";
+  [@bs.send]
+  external listenWithPort : (Js.t(#server), int) => unit = "listen";
   [@bs.get] external getListening : Js.t(#server) => bool = "listening";
   [@bs.get]
   external getMaxHeadersCount : Js.t(#server) => int = "maxHeadersCount";

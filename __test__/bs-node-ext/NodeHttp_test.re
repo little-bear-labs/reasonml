@@ -10,7 +10,7 @@ describe("http", () => {
       createServer((req, res) => {
         open IncomingMessage;
         open ServerResponse;
-        setHeader(res, "test-method", getMethod(req)) |> ignore;
+        res |. setHeader("test-method", getMethod(req)) |> ignore;
         setHeader(res, "test-url", getUrl(req)) |> ignore;
         writeHead(res, ~status=200, ());
         endStream(res);
@@ -24,7 +24,6 @@ describe("http", () => {
           url,
           res => {
             let headers = IncomingMessage.getHeaders(res);
-            Js.log(headers);
             switch (Js.Dict.get(headers, "test-method")) {
             | Some(str) => expect(str) |> toBe("GET") |> ignore
             | _ => Js.Exn.raiseError("No test-method")
@@ -39,9 +38,7 @@ describe("http", () => {
         );
       ();
     };
-    server
-    |> NodeExtNet.Server.on(`listening(() => makeRequest()))
-    |> Server.listen
-    |> ignore;
+    server |> NodeExtNet.Server.on(`listening(() => makeRequest())) |> ignore;
+    server |. Server.listenWithPort(0) |> ignore;
   });
 });
