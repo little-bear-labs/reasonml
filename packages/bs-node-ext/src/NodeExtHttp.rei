@@ -70,6 +70,8 @@ module ClientRequest: {
     ) =>
     Js.t(#clientRequest) =
     "";
+  [@bs.send.pipe: Js.t(#clientRequest)]
+  external end_ : unit = "end";
 };
 
 module Server: {
@@ -189,7 +191,7 @@ module IncomingMessage: {
     "rawTrailers";
   [@bs.get] external getSocket : Js.t(#incomingMessage) => socket = "socket";
   [@bs.get]
-  external getStatusCode : Js.t(#incomingMessage) => socket = "statusCode";
+  external getStatusCode : Js.t(#incomingMessage) => int = "statusCode";
   [@bs.get]
   external getStatusMessage : Js.t(#incomingMessage) => socket =
     "statusMessage";
@@ -245,11 +247,13 @@ module HttpRequestOpts: {
   };
 };
 
+[@bs.module "http"]
 external getWithOptions :
   (HttpRequestOpts.t, ~callback: Js.t(incomingMessage) => unit=?, unit) =>
   Js.t(clientRequest) =
   "get";
 
+[@bs.module "http"]
 external request :
   (HttpRequestOpts.t, ~callback: Js.t(incomingMessage) => unit=?, unit) =>
   Js.t(clientRequest) =
