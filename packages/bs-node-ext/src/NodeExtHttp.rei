@@ -260,3 +260,9 @@ external request :
   (HttpRequestOpts.t, ~callback: Js.t(incomingMessage) => unit=?, unit) =>
   Js.t(clientRequest) =
   "";
+
+[@bs.module "https"]
+external requestHttps :
+  (HttpRequestOpts.t, ~callback: Js.t(incomingMessage) => unit=?, unit) =>
+  Js.t(clientRequest) =
+  "request";
