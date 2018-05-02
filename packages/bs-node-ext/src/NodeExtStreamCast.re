@@ -17,3 +17,6 @@ let classifyDataOutput = (bufOrStr: dataOut) : bufferClassification =>
     | _ => JsType(classified)
     };
   };
+
+let unsafeDataOutputToString = (bufOrStr: dataOut) =>
+  Js.String.make(bufOrStr);
