@@ -161,8 +161,18 @@ module ServerResponse: {
   external writeHead :
     (
       Js.t(#serverResponse),
-      ~status: int,
-      ~message: string=?,
+      int,
+      ~headers: Js.Dict.t(string)=?,
+      unit
+    ) =>
+    unit =
+    "";
+  [@bs.send]
+  external writeHeadWithStatusMessage :
+    (
+      Js.t(#serverResponse),
+      int,
+      string,
       ~headers: Js.Dict.t(string)=?,
       unit
     ) =>
